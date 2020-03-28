@@ -1,0 +1,19 @@
+{
+  "name": "dictionary",
+  "version": "1.0.0",
+  "description": "quick defination finder for windows",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "keywords": [
+    "dictionary",
+    "defination",
+    "def"
+  ],
+  "author": "Himanshu Sharma",
+  "license": "ISC",
+  "devDependencies": {
+    "electron": "^8.2.0"
+  }
+}
