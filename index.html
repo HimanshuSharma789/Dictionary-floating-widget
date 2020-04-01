@@ -1,14 +1,137 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="UTF-8">
-        <title>Hello World!</title>
-        <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';"/>
-    </head>
-    <body>
-        <h1>Hello World!</h1>
-        We are using node <script>document.write(process.versions.node)</script>,
-        Chrome <script>document.write(process.versions.chrome)</script>,
-        and Electron <script>document.write(process.versions.electron)</script>
-    </body>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Hello World!</title>
+    <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
+    <!-- Bootstrap core CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <!-- Material Design Bootstrap -->
+    <link href="css/mdb.min.css" rel="stylesheet">
+
+</head>
+
+<body>
+    <!-- Search form -->
+    <div class="md-form active-pink active-pink-2 mb-3 mt-0 m-3">
+        <input class="form-control" id="myInput" type="search" placeholder="Search" aria-label="Search"
+            onsearch="myFunction()">
+    </div>
+
+    <div id='def-section'></div>
+
+    <script>
+
+        function appendingData(dict, synlist) {
+
+                // creating a div tag similar to below <<<div>>>
+                // <div class="card m-3">
+                //     <div class="card-body">
+                //         <p class="card-text mb-2">Definition goes here .....</p>
+
+                //         <div class="d-flex w-100 justify-content-between">
+                //             <small>Synonyms here...</small>
+                //             <a class="card-link">|AK|</a>
+                //         </div>
+                //     </div>
+                // </div>
+
+            let maindiv = document.getElementById('def-section');
+            let card = document.createElement('div');
+            card.setAttribute('class', 'card m-1');
+            maindiv.appendChild(card);
+
+            let cardbody = document.createElement('div');
+            cardbody.setAttribute('class', 'card-body');
+
+            let defbody = document.createElement('p');
+            defbody.setAttribute('class', 'card-text mb-2');
+            defbody.innerHTML = dict;
+            cardbody.appendChild(defbody);
+
+            let syndiv = document.createElement('div');
+            syndiv.setAttribute('class', 'd-flex w-100 justify-content-between');
+            let synbody = document.createElement('small');
+            synbody.innerHTML = synlist.join();
+            let linktag = document.createElement('a');
+            linktag.setAttribute('class', 'card-link');
+            linktag.innerHTML = "#";
+
+            syndiv.appendChild(synbody);
+            syndiv.appendChild(linktag);
+
+            cardbody.appendChild(syndiv);
+
+            card.appendChild(cardbody);
+            maindiv.appendChild(card);
+        }
+
+        function myFunction() {
+            var x = document.getElementById("myInput");
+            if (x.value.trim().length > 0) {
+                
+
+                var request = new XMLHttpRequest()
+
+                request.open('GET', 'https://api.dictionaryapi.dev/api/v1/entries/en/extra', true)
+                request.onload = function () {
+                    // Begin accessing JSON data here
+                    var data = JSON.parse(this.response)
+                    if (request.status >= 200 && request.status < 400) {
+                        var meaning = data[0]["meaning"]
+                        var count=0
+
+                        var tags = Object.keys(meaning);
+                        for(var i=0; i<tags.length && i<2; i++){
+                            
+                            console.log(tags[i], meaning[tags[i]]);
+
+                            var dict = "", synlist = [];
+                            var list = meaning[tags[i]];
+                            for(var j=0;j<list.length && j<2; j++) {
+                                
+                                if(count++ === 2) {break}
+                                dict = list[j]["definition"];
+                                if (list[j].hasOwnProperty('synonyms')) {
+                                    synlist = list[j]["synonyms"].slice(0, 2)
+                                }
+                                // })
+                                console.log(dict);
+                                console.log(synlist);
+                                appendingData(dict, synlist)
+                            }
+                            if(count === 2) {break}
+                            
+                        }
+
+                        // Object.keys(meaning).forEach(tag => {
+                        //     var dict = "", synlist = [];
+                        //     meaning[tag].slice(0,2).forEach(list => {
+                        //         i++;
+                        //         dict = list["definition"];
+                        //         if (list.hasOwnProperty('synonyms')) {
+                        //             synlist = list["synonyms"].slice(0, 2)
+                        //         }
+                        //         console.log(dict);
+                        //         console.log(synlist);
+                        //         appendingData(dict, synlist)
+                        //     })
+                        // })
+                        
+                    } else {
+                        console.log('error')
+                    }
+                }
+
+                request.send()
+
+            }
+        }
+    </script>
+
+</body>
+
 </html>
