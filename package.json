@@ -1,5 +1,6 @@
 {
   "name": "dictionary",
+  "productName": "Dictionary Widget",
   "version": "1.0.0",
   "description": "quick defination finder for windows",
   "main": "main.js",
@@ -14,7 +15,8 @@
   "author": "Himanshu Sharma",
   "license": "ISC",
   "devDependencies": {
-    "electron": "^8.2.0"
+    "electron": "^8.2.0",
+    "electron-packager": "^14.2.1"
   },
   "dependencies": {
     "bootstrap": "^4.4.1"

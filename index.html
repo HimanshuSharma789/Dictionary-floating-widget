@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html style="width: 100%; background: rgba(200, 0, 0, 0);min-height: 100%;">
 
 <head>
     <meta charset="UTF-8">
@@ -11,19 +11,31 @@
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <!-- Material Design Bootstrap -->
     <link href="css/mdb.min.css" rel="stylesheet">
-
+    <!-- <style>
+        #card-padding {
+            padding-top: .75rem;
+            padding-left: .75rem;
+            padding-right: .75rem;
+            padding-bottom: .5rem;
+        }
+    </style> -->
 </head>
 
-<body>
+<body style="background: rgba(0, 0, 0, 0); min-height: 100%;">
+<!-- <body> -->
     <!-- Search form -->
-    <div class="md-form active-pink active-pink-2 mb-3 mt-0 m-3">
+    <!-- <div class="md-form active-pink active-pink-2 mb-3 mt-0 m-1"> -->
+    <div class="active-pink active-pink-2 mr-1 m-1">
         <input class="form-control" id="myInput" type="search" placeholder="Search" aria-label="Search"
+            style="background: rgba(255, 255, 255, 0.8);"
             onsearch="myFunction()">
     </div>
 
     <div id='def-section'></div>
 
     <script>
+
+        
 
         function appendingData(dict, synlist) {
 
@@ -41,11 +53,12 @@
 
             let maindiv = document.getElementById('def-section');
             let card = document.createElement('div');
-            card.setAttribute('class', 'card m-1');
+            card.setAttribute('class', 'card m-1 mt-2');
             maindiv.appendChild(card);
 
             let cardbody = document.createElement('div');
-            cardbody.setAttribute('class', 'card-body');
+            cardbody.setAttribute('class', 'card-body p-2');
+            // cardbody.setAttribute('id', 'card-padding');
 
             let defbody = document.createElement('p');
             defbody.setAttribute('class', 'card-text mb-2');
@@ -55,7 +68,7 @@
             let syndiv = document.createElement('div');
             syndiv.setAttribute('class', 'd-flex w-100 justify-content-between');
             let synbody = document.createElement('small');
-            synbody.innerHTML = synlist.join();
+            synbody.innerHTML = synlist.join(', ');
             let linktag = document.createElement('a');
             linktag.setAttribute('class', 'card-link');
             linktag.innerHTML = "#";
@@ -71,12 +84,29 @@
 
         function myFunction() {
             var x = document.getElementById("myInput");
+            let maindiv = document.getElementById('def-section');
+            maindiv.innerHTML = null
+            
+            let scrollHeight = Math.max(
+                document.body.scrollHeight, document.documentElement.scrollHeight,
+                document.body.offsetHeight, document.documentElement.offsetHeight,
+                document.body.clientHeight, document.documentElement.clientHeight
+            );
+            console.log(scrollHeight);
+            
+            // console.log(window.innerWidth,window.innerHeight);
+            const {ipcRenderer} = require('electron');
+            // Right after the line where you changed the document.location
+            ipcRenderer.send('resize-me-please', 0)
+
+
+
             if (x.value.trim().length > 0) {
                 
-
+                // console.log(x.value.trim())
                 var request = new XMLHttpRequest()
 
-                request.open('GET', 'https://api.dictionaryapi.dev/api/v1/entries/en/extra', true)
+                request.open('GET', "https://api.dictionaryapi.dev/api/v1/entries/en/"+x.value.trim(), true)
                 request.onload = function () {
                     // Begin accessing JSON data here
                     var data = JSON.parse(this.response)
@@ -102,6 +132,8 @@
                                 console.log(dict);
                                 console.log(synlist);
                                 appendingData(dict, synlist)
+                                // console.log(window.innerWidth,window.innerHeight);
+                            
                             }
                             if(count === 2) {break}
                             
@@ -120,6 +152,14 @@
                         //         appendingData(dict, synlist)
                         //     })
                         // })
+
+                        let scrollHeight = Math.max(
+                            document.body.scrollHeight, document.documentElement.scrollHeight,
+                            document.body.offsetHeight, document.documentElement.offsetHeight,
+                            document.body.clientHeight, document.documentElement.clientHeight
+                        );
+                        // console.log(scrollHeight);
+                        ipcRenderer.send('resize-me-please', scrollHeight)
                         
                     } else {
                         console.log('error')
