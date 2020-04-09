@@ -1,3 +1,11 @@
+//handle setupevents as quickly as possible
+const setupEvents = require('./installers/setupEvents')
+if (setupEvents.handleSquirrelEvent()) {
+   // squirrel event handled and app will exit in 1000ms, so don't do anything else
+   return;
+}
+var path = require('path')
+
 const {app, BrowserWindow, screen,ipcMain} = require('electron')
 
 function createWindow() {
@@ -25,7 +33,7 @@ function createWindow() {
 
     ipcMain.on('resize-me-please', (event, arg) => {
         // console.log("args", arg)
-        if(arg === 0) arg=45
+        win.setMinimumSize(300,arg)
         win.setSize(300,arg)
     })
 }

@@ -87,17 +87,10 @@
             let maindiv = document.getElementById('def-section');
             maindiv.innerHTML = null
             
-            let scrollHeight = Math.max(
-                document.body.scrollHeight, document.documentElement.scrollHeight,
-                document.body.offsetHeight, document.documentElement.offsetHeight,
-                document.body.clientHeight, document.documentElement.clientHeight
-            );
-            console.log(scrollHeight);
-            
             // console.log(window.innerWidth,window.innerHeight);
             const {ipcRenderer} = require('electron');
             // Right after the line where you changed the document.location
-            ipcRenderer.send('resize-me-please', 0)
+            ipcRenderer.send('resize-me-please', 45)
 
 
 
@@ -117,23 +110,29 @@
                         var tags = Object.keys(meaning);
                         for(var i=0; i<tags.length && i<2; i++){
                             
-                            console.log(tags[i], meaning[tags[i]]);
+                            // console.log(tags[i], meaning[tags[i]]);
 
                             var dict = "", synlist = [];
                             var list = meaning[tags[i]];
-                            for(var j=0;j<list.length && j<2; j++) {
+
+                            maindiv.innerHTML = null
+                            for(var j=0; j<list.length; j++) {
                                 
-                                if(count++ === 2) {break}
-                                dict = list[j]["definition"];
-                                if (list[j].hasOwnProperty('synonyms')) {
-                                    synlist = list[j]["synonyms"].slice(0, 2)
+                                // if(jQuery.isEmptyObject(list[j]) === false)
+                                if(Object.keys(list[j]).length != 0)
+                                {
+                                    if(count++ === 2) {break}
+                                
+                                    dict = list[j]["definition"];
+                                    if (list[j].hasOwnProperty('synonyms')) {
+                                        synlist = list[j]["synonyms"].slice(0, 2)
+                                    }
+                                    
+                                    // console.log(dict);
+                                    // console.log(synlist);
+                                    
+                                    appendingData(dict, synlist)
                                 }
-                                // })
-                                console.log(dict);
-                                console.log(synlist);
-                                appendingData(dict, synlist)
-                                // console.log(window.innerWidth,window.innerHeight);
-                            
                             }
                             if(count === 2) {break}
                             
