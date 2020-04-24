@@ -1,5 +1,7 @@
 # Dictionary-floating-widget
-Gives quick definition of a word searched, along with some synonyms
+Gives quick definition of a word searched, along with some synonyms.
+
+Best when reading a pdf, documnet, book or a website (blog).
 
 The UI shows up at the top right corner of screen
 
@@ -9,7 +11,13 @@ Just search for the word and you will get maximum 2 definition of the same, alon
 
 <img src="screenshots/img2.png">
 
-# Steps to run code
+# Installer
+Binaries: https://github.com/HimanshuSharma789/Dictionary-floating-widget/releases
+(windows only)
+
+Create binaries for other OS by cloning the project and building the installer by using steps below:
+
+# Get the Source code
 Clone the repository<br>
 $ git clone https://github.com/HimanshuSharma789/Dictionary-floating-widget.git<br>
 Go into the repository<br>
