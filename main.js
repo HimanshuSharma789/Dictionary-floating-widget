@@ -16,6 +16,7 @@ function createWindow() {
         height: 45,
         y: 0,
         x: width - 300,
+        // skipTaskbar: true,
         resizable: false,
         frame: false,
         alwaysOnTop: true,
@@ -36,6 +37,14 @@ function createWindow() {
         win.setMinimumSize(300,arg)
         win.setSize(300,arg)
     })
+    
+    // "floating" + 1 is higher than all regular windows, but still behind things 
+    // like spotlight or the screen saver
+    // win.setAlwaysOnTop(true, "floating", 1);
+    // // allows the window to show over a fullscreen window
+    win.setVisibleOnAllWorkspaces(true);
+    
+    
 }
 
 

@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Hello World!</title>
+    <title>Dictionary App</title>
     <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
@@ -11,24 +11,26 @@
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <!-- Material Design Bootstrap -->
     <link href="css/mdb.min.css" rel="stylesheet">
-    <!-- <style>
-        #card-padding {
-            padding-top: .75rem;
-            padding-left: .75rem;
-            padding-right: .75rem;
-            padding-bottom: .5rem;
+    <style>
+        .vl {
+          border-left: 6px solid green;
+          height: 45px;
         }
-    </style> -->
+    </style>
+        
 </head>
 
 <body style="background: rgba(0, 0, 0, 0); min-height: 100%;">
 <!-- <body> -->
     <!-- Search form -->
     <!-- <div class="md-form active-pink active-pink-2 mb-3 mt-0 m-1"> -->
-    <div class="active-pink active-pink-2 mr-1 m-1">
-        <input class="form-control" id="myInput" type="search" placeholder="Search" aria-label="Search"
-            style="background: rgba(255, 255, 255, 0.8);"
-            onsearch="myFunction()">
+    <div style="display:flex;">
+        <div class="active-pink active-pink-2 m-1" style="width:95%; padding-right:0px;">
+            <input class="form-control" id="myInput" type="search" placeholder="Search" aria-label="Search"
+                style="background: rgba(255, 255, 255, 0.8);"
+                onsearch="myFunction()">
+        </div>
+        <div class="vl" style="-webkit-app-region: drag"></div>
     </div>
 
     <div id='def-section'></div>
@@ -82,6 +84,7 @@
             maindiv.appendChild(card);
         }
 
+        
         function myFunction() {
             var x = document.getElementById("myInput");
             let maindiv = document.getElementById('def-section');
@@ -104,6 +107,8 @@
                     // Begin accessing JSON data here
                     var data = JSON.parse(this.response)
                     if (request.status >= 200 && request.status < 400) {
+
+                        maindiv.innerHTML = null
                         var meaning = data[0]["meaning"]
                         var count=0
 
@@ -115,14 +120,11 @@
                             var dict = "", synlist = [];
                             var list = meaning[tags[i]];
 
-                            maindiv.innerHTML = null
                             for(var j=0; j<list.length; j++) {
                                 
                                 // if(jQuery.isEmptyObject(list[j]) === false)
                                 if(Object.keys(list[j]).length != 0)
                                 {
-                                    if(count++ === 2) {break}
-                                
                                     dict = list[j]["definition"];
                                     if (list[j].hasOwnProperty('synonyms')) {
                                         synlist = list[j]["synonyms"].slice(0, 2)
@@ -132,25 +134,13 @@
                                     // console.log(synlist);
                                     
                                     appendingData(dict, synlist)
+
+                                    if(++count == 2) {break}
                                 }
                             }
-                            if(count === 2) {break}
+                            if(count >= 2) {break}
                             
                         }
-
-                        // Object.keys(meaning).forEach(tag => {
-                        //     var dict = "", synlist = [];
-                        //     meaning[tag].slice(0,2).forEach(list => {
-                        //         i++;
-                        //         dict = list["definition"];
-                        //         if (list.hasOwnProperty('synonyms')) {
-                        //             synlist = list["synonyms"].slice(0, 2)
-                        //         }
-                        //         console.log(dict);
-                        //         console.log(synlist);
-                        //         appendingData(dict, synlist)
-                        //     })
-                        // })
 
                         let scrollHeight = Math.max(
                             document.body.scrollHeight, document.documentElement.scrollHeight,
@@ -161,6 +151,7 @@
                         ipcRenderer.send('resize-me-please', scrollHeight)
                         
                     } else {
+
                         console.log('error')
                     }
                 }
