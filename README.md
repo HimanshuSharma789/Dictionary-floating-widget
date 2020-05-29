@@ -3,7 +3,7 @@ Gives quick definition of a word searched, along with some synonyms.
 
 Best when reading a pdf, documnet, book or a website (blog).
 
-The UI shows up at the top right corner of screen
+The UI shows up at the top right corner of screen. Also have a dragable section at right side to move the widget.
 
 <img src="screenshots/img1.png">
 
